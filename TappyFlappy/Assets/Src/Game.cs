@@ -17,11 +17,6 @@ using System.Collections;
 public class Game : MonoBehaviour
 {
     // Once set, we can just spawn new instances of these
-    public GameObject QuadPrefab;
-    public Shader QuadShader;
-
-    public GameObject TurretPrefab;
-
     protected static Game sGame;
     public static Game GetInstance() { return sGame; }
 
@@ -40,7 +35,6 @@ public class Game : MonoBehaviour
 
         // keep this object around between level transitions
         Object.DontDestroyOnLoad(gameObject);
-
     }
 
     // Update is called once per frame
