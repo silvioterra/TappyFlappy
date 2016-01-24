@@ -66,6 +66,9 @@
   <ItemGroup>
     <Compile Include="Assets\Src\Bird.cs" />
     <Compile Include="Assets\Src\Game.cs" />
+    <Compile Include="Assets\Src\GroundBehaviour.cs" />
+    <Compile Include="Assets\Src\IScreenListener.cs" />
+    <Compile Include="Assets\Src\LevelManager.cs" />
     <Compile Include="Assets\Src\StaticBackground.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />

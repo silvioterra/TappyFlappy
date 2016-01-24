@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using Assets.Src;
+using System;
 // Always around, started only once
 
 /// <summary>
@@ -20,26 +23,68 @@ public class Game : MonoBehaviour
     protected static Game sGame;
     public static Game GetInstance() { return sGame; }
 
+    List<IScreenListener> mScreenListeners;
+
+    int mCachedScreenWidth;
+    int mCachedScreenHeight;
+
+
+    void Awake()
+    {
+        if (sGame)
+        {
+            // NO DUPES ALLOWED (can happen if we reload the Scene with this on the side)
+            UnityEngine.Object.DestroyImmediate(gameObject);
+            return;
+        }
+        sGame = this;
+
+        mScreenListeners = new List<IScreenListener>();
+        mCachedScreenWidth = Screen.width;
+        mCachedScreenHeight = Screen.height;
+
+        // mCachedResolution = Screen.currentResolution;
+    }
+
     // Use this for initialization
     void Start()
     {
         Cursor.visible = false;
 
-        if (sGame)
-        {
-            // NO DUPES ALLOWED (can happen if we reload the Scene with this on the side)
-            Object.DestroyImmediate(gameObject);
-            return;
-        }
-        sGame = this;
-
         // keep this object around between level transitions
-        Object.DontDestroyOnLoad(gameObject);
+        UnityEngine.Object.DontDestroyOnLoad(gameObject);
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Soooo.... unity doesn't have a default callback for when we resize a window/change screen resolutions?
+        // This seems either crazy or a lack of proper research on my part.
+        if (mCachedScreenWidth != Screen.width || mCachedScreenHeight != Screen.height)
+        {
+            mCachedScreenWidth = Screen.width;
+            mCachedScreenHeight = Screen.height;
 
+            foreach (IScreenListener listener in mScreenListeners)
+            {
+                listener.OnScreenResolutionChanged(mCachedScreenWidth, mCachedScreenHeight);
+            }
+        }
     }
+
+    public void AddScreenListener(IScreenListener newListener)
+    {
+        // Won't add it twice.
+        if (!mScreenListeners.Contains(newListener))
+        {
+            mScreenListeners.Add(newListener);
+        }
+    }
+
+    public void RemoveScreenListener(IScreenListener listener)
+    {
+        mScreenListeners.Remove(listener);
+    }
+
 }
+
