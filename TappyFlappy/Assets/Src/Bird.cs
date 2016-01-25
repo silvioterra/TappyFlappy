@@ -126,6 +126,7 @@ public class Bird : MonoBehaviour, IInputListener, IWorldStateListener
         mPlaying = true;
         // Reset bird's position!
         transform.position = new Vector3(0, 0, 0);
+        mPhysicsBody.angularVelocity = 0;
     }
 
     void IWorldStateListener.OnPlayStart()

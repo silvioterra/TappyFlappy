@@ -120,10 +120,7 @@ public class Obstacle : MonoBehaviour, IScreenListener, ISpeedListener
             // This is how far we are from the center of the screen, in world units
             float xPos = mPositionInWorld.x - worldPosition;
             Vector3 placement = Camera.main.ViewportToWorldPoint(new Vector3(xPos, 0, 0));
-            // Hack. Without this the 33% starts from the BOTTOM of the screen. The Ground is at 1.0f
-            // So this allows for a small amount of turret penetration
-            const float kGroundHeight = 0.9f;
-            this.transform.position = new Vector3(xPos, -Camera.main.orthographicSize + mPositionInWorld.y / 2.0f + kGroundHeight, 0);
+            this.transform.position = new Vector3(xPos, -Camera.main.orthographicSize + mPositionInWorld.y / 2.0f, 0);
             //-Camera.main.orthographicSize + (newObstacle.mHeight)
         }
 
