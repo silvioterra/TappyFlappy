@@ -6,7 +6,6 @@ public class Bird : MonoBehaviour, IInputListener, IWorldStateListener
 {
 
     // Vector3 for simplicity of other calls, Vector2 should be enough
-    Vector3 mCurrentVelocity;
     private bool mIsPaused;
 
     // By default, pointing straight down. Wind, etc, might want to affect this?
@@ -30,7 +29,6 @@ public class Bird : MonoBehaviour, IInputListener, IWorldStateListener
         Game.GetInstance().GetInputManager().AddInputListener("flap", this);
 
         Game.GetInstance().AddWorldStateListener(this);
-        mCurrentVelocity = Vector3.zero;
         mIsPaused = false;
         mInputLockFrames = 0;
 
@@ -50,25 +48,27 @@ public class Bird : MonoBehaviour, IInputListener, IWorldStateListener
         {
             mInputLockFrames--;
         }
-        if (mIsFlying && !mUseUnityPhysics)
+
+        // Map initial flap velocity to 60 and terminal velocity to -90
+        if (mIsFlying)
         {
-            Vector3 currentPosition = transform.position;
-            // Update the current velocity with gravity
 
-            // this makes some new allocations. Set() would be more efficient but less legible right now.
-            Vector3 frameForcesPerSecond = mGravityPerSecond;
-
-            mCurrentVelocity += frameForcesPerSecond * Time.deltaTime;
-
-            if (mCurrentVelocity.sqrMagnitude > (mMaxVelocityPerSecond * mMaxVelocityPerSecond))
+            float rotZ = 0;
+            if (mPhysicsBody.velocity.y > 0)
             {
-                mCurrentVelocity.Normalize();
-                mCurrentVelocity *= mMaxVelocityPerSecond;
+                // 60 <-> 0
+
+                float pct = mPhysicsBody.velocity.y / mFlapVector.y;
+                rotZ = pct * 60;
             }
+            else if (mPhysicsBody.velocity.y < 0)
+            {
+                // Relying on only ever changing the y vector for bird
+                float pct = Math.Min(1, -mPhysicsBody.velocity.y / mMaxVelocityPerSecond);
 
-            currentPosition += mCurrentVelocity * Time.deltaTime;
-
-            transform.position = currentPosition;
+                rotZ = pct * -90;
+            }
+            transform.localRotation = Quaternion.Euler(0, 0, rotZ);
         }
     }
 
@@ -91,10 +91,8 @@ public class Bird : MonoBehaviour, IInputListener, IWorldStateListener
     public void Flap()
     {
         // Override all other powers to FLAP, FLAP YOU MONSTER!
-        mCurrentVelocity = mFlapVector;
 
-
-        mPhysicsBody.velocity = mCurrentVelocity;
+        mPhysicsBody.velocity = mFlapVector;
     }
 
     public void OnLose()
@@ -126,6 +124,7 @@ public class Bird : MonoBehaviour, IInputListener, IWorldStateListener
         mPlaying = true;
         // Reset bird's position!
         transform.position = new Vector3(0, 0, 0);
+        transform.localRotation = Quaternion.Euler(0, 0, 0);
         mPhysicsBody.angularVelocity = 0;
     }
 

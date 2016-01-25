@@ -5,7 +5,7 @@ using System;
 public class Obstacle : MonoBehaviour, IScreenListener, ISpeedListener
 {
 
-    public const float MaxHeightScreenPercent = 0.33f;
+    public const float MaxHeightScreenPercent = 0.5f;
 
     protected bool mInUse;
     protected Vector2 mPositionInWorld;
