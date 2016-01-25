@@ -22,7 +22,10 @@ public class Bullet : MonoBehaviour {
 
     internal void SetWorldDirection(Vector3 direction)
     {
-        WorldDirection = direction; 
+        WorldDirection = direction;
+        Vector3 norm = direction.normalized;
+        float angle = Mathf.Atan2(norm.y, norm.x) * Mathf.Rad2Deg;
+        this.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
     public void UpdatePosition(float worldPosition)

@@ -42,6 +42,7 @@ public class LevelManager : IWorldStateListener, IScreenListener
     private int mLevelSeed;
     private float mWorldWidth;
     private float mLastObstaclePosition;
+    private int mLastType;
     private bool mPlaying;
     public LevelManager()
     {
@@ -185,9 +186,10 @@ public class LevelManager : IWorldStateListener, IScreenListener
 
     private void AddRandomObstacle()
     {
-        mLastObstaclePosition += mObstaclePadding;
-        float position = mLastObstaclePosition;
         int type = (int)(Random.value * 3.0f);
+        mLastObstaclePosition += mObstaclePadding * Random.Range((mLastType == type ? 1: 2), 3);
+        mLastType = type;
+        float position = mLastObstaclePosition;
         float height = Random.Range(0.1f, Turret.MaxHeightScreenPercent);
         mObstacles.Enqueue(new LevelObstacle(position, type, height));
     }
