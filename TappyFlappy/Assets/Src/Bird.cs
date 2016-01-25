@@ -112,6 +112,11 @@ public class Bird : MonoBehaviour, IInputListener, IWorldStateListener
 
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        // TODO - bird becomes worried if the other is a gun.
+
+    }
     void IWorldStateListener.OnGameLose()
     {
         // TODO - display dead bird?
