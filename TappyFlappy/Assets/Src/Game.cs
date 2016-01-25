@@ -91,6 +91,9 @@ public class Game : MonoBehaviour
         mScreenListeners.Remove(listener);
     }
 
-
+    public void ShowLoseScreen()
+    {
+        // TODO
+    }
 }
 

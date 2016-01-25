@@ -17,22 +17,32 @@ public class Bird : MonoBehaviour, IInputListener
     public float mMaxVelocityPerSecond = 15.0f;
     private bool mIsFlying;
 
+    // Alternatively, use the Unity physics for all this. 
+    // Might not be as flexible for crazy stuff, but it saves a lot of time
+    private bool mUseUnityPhysics = true;
+    Rigidbody2D mPhysicsBody;
+
+
     // Use this for initialization
     void Start ()
     {
         Game.GetInstance().GetInputManager().AddInputListener("flap", this);
         mCurrentVelocity = Vector3.zero;
         mIsPaused = false;
+
+        mPhysicsBody = (Rigidbody2D)GetComponent("Rigidbody2D");
+        mPhysicsBody.simulated = false;
+
     }
-	
-	// Update is called once per frame
-	void Update()
+
+    // Update is called once per frame
+    void Update()
     {
         if (mIsPaused) 
         {
             return;
         }
-        if (mIsFlying)
+        if (mIsFlying && !mUseUnityPhysics)
         {
             Vector3 currentPosition = transform.position;
             // Update the current velocity with gravity
@@ -68,17 +78,32 @@ public class Bird : MonoBehaviour, IInputListener
     {
         // Override all other powers to FLAP, FLAP YOU MONSTER!
         mCurrentVelocity = mFlapVector;
+
+
+        mPhysicsBody.velocity = mCurrentVelocity;
     }
 
     public void OnStart()
     {
         mIsFlying = true;
+        mPhysicsBody.simulated = true;
     }
 
     public void OnLose()
     {
         mIsFlying = false;
+        mPhysicsBody.simulated = false;
     }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("collision_die"))
+        {
+            // Oh no game over man.
+            OnLose();
+            Game.GetInstance().ShowLoseScreen();
+        }
+
+    }
 
 }
