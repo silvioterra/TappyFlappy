@@ -67,6 +67,7 @@
     <Compile Include="Assets\Src\GroundBehaviour.cs" />
     <Compile Include="Assets\Src\InputManager.cs" />
     <Compile Include="Assets\Src\LevelManager.cs" />
+    <Compile Include="Assets\Src\Obstacle.cs" />
     <Compile Include="Assets\Src\StaticBackground.cs" />
     <Compile Include="Assets\Src\Turret.cs" />
     <Compile Include="Assets\Src\interfaces\IInputListener.cs" />
