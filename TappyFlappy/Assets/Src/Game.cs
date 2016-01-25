@@ -19,15 +19,18 @@ using System;
 /// </summary>
 public class Game : MonoBehaviour
 {
-    // Once set, we can just spawn new instances of these
     protected static Game sGame;
     public static Game GetInstance() { return sGame; }
+
+    public InputManager GetInputManager() { return mInputManager; }
 
     List<IScreenListener> mScreenListeners;
 
     int mCachedScreenWidth;
     int mCachedScreenHeight;
 
+
+    InputManager mInputManager;
 
     void Awake()
     {
@@ -38,6 +41,7 @@ public class Game : MonoBehaviour
             return;
         }
         sGame = this;
+        mInputManager = new InputManager();
 
         mScreenListeners = new List<IScreenListener>();
         mCachedScreenWidth = Screen.width;
@@ -70,6 +74,7 @@ public class Game : MonoBehaviour
                 listener.OnScreenResolutionChanged(mCachedScreenWidth, mCachedScreenHeight);
             }
         }
+        mInputManager.Update();
     }
 
     public void AddScreenListener(IScreenListener newListener)
@@ -85,6 +90,7 @@ public class Game : MonoBehaviour
     {
         mScreenListeners.Remove(listener);
     }
+
 
 }
 

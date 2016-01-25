@@ -67,7 +67,9 @@
     <Compile Include="Assets\Src\Bird.cs" />
     <Compile Include="Assets\Src\Game.cs" />
     <Compile Include="Assets\Src\GroundBehaviour.cs" />
+    <Compile Include="Assets\Src\IInputListener.cs" />
     <Compile Include="Assets\Src\IScreenListener.cs" />
+    <Compile Include="Assets\Src\InputManager.cs" />
     <Compile Include="Assets\Src\LevelManager.cs" />
     <Compile Include="Assets\Src\StaticBackground.cs" />
   </ItemGroup>
