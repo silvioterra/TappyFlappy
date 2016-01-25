@@ -26,6 +26,7 @@ public class Game : MonoBehaviour, IInputListener
 
     public InputManager GetInputManager() { return mInputManager; }
     public LevelManager GetLevelManager() { return mLevelManager; }
+    public BulletManager GetBulletManager() { return mBulletManager; }
 
     List<IScreenListener> mScreenListeners;
     List<IWorldStateListener> mWorldStateListeners;
@@ -35,6 +36,8 @@ public class Game : MonoBehaviour, IInputListener
 
     LevelManager mLevelManager;
     InputManager mInputManager;
+    BulletManager mBulletManager;
+
     private bool mLost;
 
 
@@ -57,8 +60,16 @@ public class Game : MonoBehaviour, IInputListener
 
         mLevelManager = new LevelManager();
         mLevelManager.TurretPrefab = TurretPrefab;
+
+        mBulletManager = new BulletManager();
+
+
         // Sometimes the listeners add themselves, sometimes we add the listeners.
         AddWorldStateListener(mLevelManager);
+        AddWorldStateListener(mBulletManager);
+        AddScreenListener(mBulletManager);
+        mLevelManager.AddSpeedListener(mBulletManager);
+
 
         // mCachedResolution = Screen.currentResolution;
     }
@@ -90,6 +101,7 @@ public class Game : MonoBehaviour, IInputListener
         }
         mInputManager.Update();
         mLevelManager.Update();
+        mBulletManager.Update();
     }
 
     public void AddScreenListener(IScreenListener newListener)

@@ -9,8 +9,8 @@ public class Turret : Obstacle
     GameObject mShaft;
     private BoxCollider2D mShaftCollider;
     float mMaxHeight;
-    private GameObject mGun;
-
+    private Gun mGun;
+    private bool mIsCeilingTurret;
     protected override void UpdateMaxHeight()
     {
         base.UpdateMaxHeight();
@@ -29,7 +29,7 @@ public class Turret : Obstacle
         mShaft.GetComponent<Renderer>().material.mainTextureScale = new Vector2(1.0f, mTurretHeight / 2.0f);
         // TODO - remove the actual gun height from this height. 
 
-        mHackCollider.size = new Vector2(mWidth, 1.0f);
+        mHackCollider.size = new Vector2(1.0f, 1.0f);
         mGun.transform.localScale = new Vector3(mWidth, 1.0f, 1.0f);
         // Assuming mGun's scale is always 1.0, not going to change this.
         mGun.transform.localPosition = new Vector3(0, mTurretHeight / 2.0f + 0.5f, 0);
@@ -48,12 +48,26 @@ public class Turret : Obstacle
         mMaxHeight = MaxHeightScreenPercent;// Camera.main.orthographicSize * 2.0f;
 
         mShaft = this.transform.Find("Shaft").gameObject;
-        mGun = this.transform.Find("Gun").gameObject;
+        mGun = transform.Find("Gun").gameObject.GetComponent<Gun>();
         mHackCollider = this.transform.Find("Shaft/InfinityTube").gameObject.GetComponent<BoxCollider2D>();
         
         mShaftCollider = GetComponent<BoxCollider2D>();
 
     }
 
+    public override void SetUsed(bool used)
+    {
+        base.SetUsed(used);
+    }
 
+    protected override void PlaceOnWorld(float x, float y, int z)
+    {
+        base.PlaceOnWorld(x, (mIsCeilingTurret ? -y : y), z);
+
+    }
+    internal void SetCeilingTurret(bool isOnCeiling)
+    {
+        mIsCeilingTurret = isOnCeiling;
+        this.transform.localScale = new Vector3(1, (isOnCeiling ? -1 : 1), 1);
+    }
 }

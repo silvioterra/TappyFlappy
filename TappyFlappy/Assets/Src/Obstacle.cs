@@ -83,7 +83,7 @@ public class Obstacle : MonoBehaviour, IScreenListener, ISpeedListener
     }
 
 
-    public void SetUsed(bool used)
+    public virtual void SetUsed(bool used)
     {
         if (mInUse == used)
         {
@@ -113,17 +113,18 @@ public class Obstacle : MonoBehaviour, IScreenListener, ISpeedListener
         {
             // Determine the new screen position for this turret
 
-            Vector3 left = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0));
-            Vector3 right = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, 0));
-            Vector3 worldWidth = right - left;
-
             // This is how far we are from the center of the screen, in world units
             float xPos = mPositionInWorld.x - worldPosition;
             Vector3 placement = Camera.main.ViewportToWorldPoint(new Vector3(xPos, 0, 0));
-            this.transform.position = new Vector3(xPos, -Camera.main.orthographicSize + mPositionInWorld.y / 2.0f, 0);
+            PlaceOnWorld(xPos, -Camera.main.orthographicSize + mPositionInWorld.y / 2.0f, 0);
             //-Camera.main.orthographicSize + (newObstacle.mHeight)
         }
 
+    }
+
+    virtual protected void PlaceOnWorld(float x, float y, int z)
+    {
+        this.transform.position = new Vector3(x, y, z);
     }
 
     void ISpeedListener.OnSpeedChanged(float newSpeed)

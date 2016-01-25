@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Assets\Src\Bird.cs" />
     <Compile Include="Assets\Src\Bullet.cs" />
+    <Compile Include="Assets\Src\BulletManager.cs" />
     <Compile Include="Assets\Src\Game.cs" />
     <Compile Include="Assets\Src\GroundBehaviour.cs" />
     <Compile Include="Assets\Src\Gun.cs" />

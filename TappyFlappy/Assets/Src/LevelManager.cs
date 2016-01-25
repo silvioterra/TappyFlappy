@@ -19,7 +19,7 @@ public class LevelObstacle
 
 public class LevelManager : IWorldStateListener, IScreenListener
 {
-    const int kMaxTurrets = 10;
+    const int kMaxTurrets = 15;
     // Used to instantiate things.
     public Turret TurretPrefab;
     public float StartingWorldSpeed = 2.0f;
@@ -112,6 +112,8 @@ public class LevelManager : IWorldStateListener, IScreenListener
                         if (!tmp.Used)
                         {
                             tmp.SetUsed(true);
+                            // Eh, I guess I'm not doing a powerup column
+                            tmp.SetCeilingTurret((newObstacle.mType == 1));
                             tmp.SetHeight(newObstacle.mHeight);
                             tmp.WorldPosition = newObstacle.mWorldPosition;
                             break;
