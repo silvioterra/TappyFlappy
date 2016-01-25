@@ -126,6 +126,14 @@ public class Game : MonoBehaviour, IInputListener
 
     }
 
+    public void StartFlapping()
+    {
+        foreach (IWorldStateListener listener in mWorldStateListeners)
+        {
+            listener.OnPlayStart();
+        }
+    }
+
     public void RestartGame()
     {
         mLost = false;

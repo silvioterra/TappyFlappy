@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.3.1f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -67,14 +65,14 @@
     <Compile Include="Assets\Src\Bird.cs" />
     <Compile Include="Assets\Src\Game.cs" />
     <Compile Include="Assets\Src\GroundBehaviour.cs" />
-    <Compile Include="Assets\Src\IInputListener.cs" />
-    <Compile Include="Assets\Src\IScreenListener.cs" />
     <Compile Include="Assets\Src\InputManager.cs" />
-    <Compile Include="Assets\Src\ISpeedListener.cs" />
-    <Compile Include="Assets\Src\IWorldStateListener.cs" />
     <Compile Include="Assets\Src\LevelManager.cs" />
     <Compile Include="Assets\Src\StaticBackground.cs" />
     <Compile Include="Assets\Src\Turret.cs" />
+    <Compile Include="Assets\Src\interfaces\IInputListener.cs" />
+    <Compile Include="Assets\Src\interfaces\IScreenListener.cs" />
+    <Compile Include="Assets\Src\interfaces\ISpeedListener.cs" />
+    <Compile Include="Assets\Src\interfaces\IWorldStateListener.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

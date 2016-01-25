@@ -2,4 +2,5 @@
 {
     void OnGameLose();
     void OnRestartGame();
+    void OnPlayStart();
 }

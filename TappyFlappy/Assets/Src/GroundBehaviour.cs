@@ -17,7 +17,7 @@ public class GroundBehaviour : MonoBehaviour, IScreenListener, ISpeedListener
         mTilingOffsetSpeed = newSpeed;
     }
 
-    void ISpeedListener.OnWorldPositionChanged(float mWorldPosition)
+    void ISpeedListener.OnScreenCenterPositionUpdated(float mWorldPosition)
     {
         MeshFilter meshFilter = GetComponent<MeshFilter>();
         float newOffset = GetComponent<Renderer>().material.mainTextureOffset.x;
@@ -55,10 +55,17 @@ public class GroundBehaviour : MonoBehaviour, IScreenListener, ISpeedListener
         {
             return;
         }
+        Vector3 left = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0));
+        Vector3 right = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, 0));
+        Vector3 worldWidth = right - left;
+        this.transform.localScale = new Vector3(worldWidth.x, 1.0f, 1.0f);
+        // Update the tiling for the turret
+        this.GetComponent<Renderer>().material.mainTextureScale = new Vector2(-this.transform.localScale.x, -1);
 
         float newY = -camera.orthographicSize + (meshFilter.transform.localScale.y * meshFilter.mesh.bounds.size.y) / 2.0f;
         Vector3 oldPosition = this.transform.position;
 
         this.transform.position = new Vector3(oldPosition.x, newY, oldPosition.z);
+
     }
 }

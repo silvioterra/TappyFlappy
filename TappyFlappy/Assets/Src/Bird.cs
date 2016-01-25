@@ -82,8 +82,9 @@ public class Bird : MonoBehaviour, IInputListener, IWorldStateListener
         // we're only listening for one input anyway.
         if (!mIsFlying)
         {
-            OnStart();
+            Game.GetInstance().StartFlapping();
         }
+        // We also flap, regardless
         Flap();
     }
 
@@ -94,12 +95,6 @@ public class Bird : MonoBehaviour, IInputListener, IWorldStateListener
 
 
         mPhysicsBody.velocity = mCurrentVelocity;
-    }
-
-    public void OnStart()
-    {
-        mIsFlying = true;
-        mPhysicsBody.simulated = true;
     }
 
     public void OnLose()
@@ -131,5 +126,11 @@ public class Bird : MonoBehaviour, IInputListener, IWorldStateListener
         mPlaying = true;
         // Reset bird's position!
         transform.position = new Vector3(0, 0, 0);
+    }
+
+    void IWorldStateListener.OnPlayStart()
+    {
+        mIsFlying = true;
+        mPhysicsBody.simulated = true;
     }
 }
