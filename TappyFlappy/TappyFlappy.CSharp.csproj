@@ -70,6 +70,8 @@
     <Compile Include="Assets\Src\IInputListener.cs" />
     <Compile Include="Assets\Src\IScreenListener.cs" />
     <Compile Include="Assets\Src\InputManager.cs" />
+    <Compile Include="Assets\Src\ISpeedListener.cs" />
+    <Compile Include="Assets\Src\IWorldStateListener.cs" />
     <Compile Include="Assets\Src\LevelManager.cs" />
     <Compile Include="Assets\Src\StaticBackground.cs" />
     <Compile Include="Assets\Src\Turret.cs" />

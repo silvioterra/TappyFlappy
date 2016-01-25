@@ -21,15 +21,24 @@ public class Game : MonoBehaviour
     protected static Game sGame;
     public static Game GetInstance() { return sGame; }
 
+    // Needed by Unity to instantiate Prefabs
+    public Turret TurretPrefab;
+
     public InputManager GetInputManager() { return mInputManager; }
+    public LevelManager GetLevelManager() { return mLevelManager; }
 
+
+
+   
     List<IScreenListener> mScreenListeners;
-
+    List<IWorldStateListener> mWorldStateListeners;
     int mCachedScreenWidth;
     int mCachedScreenHeight;
 
 
+    LevelManager mLevelManager;
     InputManager mInputManager;
+
 
     void Awake()
     {
@@ -46,6 +55,12 @@ public class Game : MonoBehaviour
         mCachedScreenWidth = Screen.width;
         mCachedScreenHeight = Screen.height;
 
+        mWorldStateListeners = new List<IWorldStateListener>();
+
+
+        mLevelManager = new LevelManager();
+        mLevelManager.TurretPrefab = TurretPrefab;
+
         // mCachedResolution = Screen.currentResolution;
     }
 
@@ -56,11 +71,13 @@ public class Game : MonoBehaviour
 
         // keep this object around between level transitions
         UnityEngine.Object.DontDestroyOnLoad(gameObject);
+        mLevelManager.Start();
     }
 
     // Update is called once per frame
     void Update()
     {
+
         // Soooo.... unity doesn't have a default callback for when we resize a window/change screen resolutions?
         // This seems either crazy or a lack of proper research on my part.
         if (mCachedScreenWidth != Screen.width || mCachedScreenHeight != Screen.height)
@@ -74,6 +91,7 @@ public class Game : MonoBehaviour
             }
         }
         mInputManager.Update();
+        mLevelManager.Update();
     }
 
     public void AddScreenListener(IScreenListener newListener)
@@ -90,9 +108,24 @@ public class Game : MonoBehaviour
         mScreenListeners.Remove(listener);
     }
 
+
+
     public void ShowLoseScreen()
     {
         // TODO
+        foreach (IWorldStateListener listener in mWorldStateListeners)
+        {
+            listener.OnGameLose();
+        }
+
+    }
+
+    public void RestartGame()
+    {
+        foreach (IWorldStateListener listener in mWorldStateListeners)
+        {
+            listener.OnRestartGame();
+        }
     }
 }
 
