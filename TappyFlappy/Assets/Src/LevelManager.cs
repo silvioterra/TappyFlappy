@@ -207,7 +207,7 @@ public class LevelManager : IWorldStateListener, IScreenListener
     {
         mPlaying = true;
         mObstacles.Clear();
-        mLastObstaclePosition = mWorldPosition + mWorldWidth / 2.0f + 3.0f;
+        mLastObstaclePosition = mWorldPosition + mWorldWidth / 2.0f;
         PrepopulateObstacles(10);
 
     }
