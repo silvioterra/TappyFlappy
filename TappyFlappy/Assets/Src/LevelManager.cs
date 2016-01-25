@@ -71,6 +71,11 @@ public class LevelManager : IWorldStateListener
     void IWorldStateListener.OnGameLose()
     {
         mPaused = true;
+        mWorldSpeed = 0.0f;
+        foreach (ISpeedListener listener in mSpeedListeners)
+        {
+            listener.OnSpeedChanged(mWorldSpeed);
+        }
     }
 
     void IWorldStateListener.OnRestartGame()
@@ -78,7 +83,10 @@ public class LevelManager : IWorldStateListener
         mPaused = false;
         mWorldPosition = 0.0f;
         mWorldSpeed = StartingWorldSpeed;
-
+        foreach (ISpeedListener listener in mSpeedListeners)
+        {
+            listener.OnSpeedChanged(mWorldSpeed);
+        }
 
 
     }

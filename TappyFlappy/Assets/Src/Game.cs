@@ -16,7 +16,7 @@ using System;
 /// This might be outdated knowledge, but it's how Unity behaved a few years ago; order of Update() calls
 /// was non-deterministic.
 /// </summary>
-public class Game : MonoBehaviour
+public class Game : MonoBehaviour, IInputListener
 {
     protected static Game sGame;
     public static Game GetInstance() { return sGame; }
@@ -27,9 +27,6 @@ public class Game : MonoBehaviour
     public InputManager GetInputManager() { return mInputManager; }
     public LevelManager GetLevelManager() { return mLevelManager; }
 
-
-
-   
     List<IScreenListener> mScreenListeners;
     List<IWorldStateListener> mWorldStateListeners;
     int mCachedScreenWidth;
@@ -38,6 +35,7 @@ public class Game : MonoBehaviour
 
     LevelManager mLevelManager;
     InputManager mInputManager;
+    private bool mLost;
 
 
     void Awake()
@@ -50,16 +48,17 @@ public class Game : MonoBehaviour
         }
         sGame = this;
         mInputManager = new InputManager();
-
+        mInputManager.AddInputListener("flap", this);
         mScreenListeners = new List<IScreenListener>();
         mCachedScreenWidth = Screen.width;
         mCachedScreenHeight = Screen.height;
 
         mWorldStateListeners = new List<IWorldStateListener>();
 
-
         mLevelManager = new LevelManager();
         mLevelManager.TurretPrefab = TurretPrefab;
+        // Sometimes the listeners add themselves, sometimes we add the listeners.
+        AddWorldStateListener(mLevelManager);
 
         // mCachedResolution = Screen.currentResolution;
     }
@@ -77,7 +76,6 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         // Soooo.... unity doesn't have a default callback for when we resize a window/change screen resolutions?
         // This seems either crazy or a lack of proper research on my part.
         if (mCachedScreenWidth != Screen.width || mCachedScreenHeight != Screen.height)
@@ -102,6 +100,14 @@ public class Game : MonoBehaviour
             mScreenListeners.Add(newListener);
         }
     }
+    public void AddWorldStateListener(IWorldStateListener newListener)
+    {
+        // Won't add it twice.
+        if (!mWorldStateListeners.Contains(newListener))
+        {
+            mWorldStateListeners.Add(newListener);
+        }
+    }
 
     public void RemoveScreenListener(IScreenListener listener)
     {
@@ -112,7 +118,7 @@ public class Game : MonoBehaviour
 
     public void ShowLoseScreen()
     {
-        // TODO
+        mLost = true;
         foreach (IWorldStateListener listener in mWorldStateListeners)
         {
             listener.OnGameLose();
@@ -122,9 +128,19 @@ public class Game : MonoBehaviour
 
     public void RestartGame()
     {
+        mLost = false;
         foreach (IWorldStateListener listener in mWorldStateListeners)
         {
             listener.OnRestartGame();
+        }
+    }
+
+    void IInputListener.OnInputTriggered(string name)
+    {
+        if (mLost == true)
+        {
+            // Don't care. Just restart.
+            RestartGame();
         }
     }
 }

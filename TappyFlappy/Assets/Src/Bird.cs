@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class Bird : MonoBehaviour, IInputListener
+public class Bird : MonoBehaviour, IInputListener, IWorldStateListener
 {
 
     // Vector3 for simplicity of other calls, Vector2 should be enough
@@ -20,14 +21,18 @@ public class Bird : MonoBehaviour, IInputListener
     // Might not be as flexible for crazy stuff, but it saves a lot of time
     private bool mUseUnityPhysics = true;
     Rigidbody2D mPhysicsBody;
-
+    private bool mPlaying = true;
+    private int mInputLockFrames;
 
     // Use this for initialization
     void Start ()
     {
         Game.GetInstance().GetInputManager().AddInputListener("flap", this);
+
+        Game.GetInstance().AddWorldStateListener(this);
         mCurrentVelocity = Vector3.zero;
         mIsPaused = false;
+        mInputLockFrames = 0;
 
         mPhysicsBody = (Rigidbody2D)GetComponent("Rigidbody2D");
         mPhysicsBody.simulated = false;
@@ -40,6 +45,10 @@ public class Bird : MonoBehaviour, IInputListener
         if (mIsPaused) 
         {
             return;
+        }
+        if (mInputLockFrames > 0)
+        {
+            mInputLockFrames--;
         }
         if (mIsFlying && !mUseUnityPhysics)
         {
@@ -65,6 +74,11 @@ public class Bird : MonoBehaviour, IInputListener
 
     void IInputListener.OnInputTriggered(string name)
     {
+        if (!mPlaying || mInputLockFrames > 0)
+        {
+            // Nope, gotta restart first.
+            return;
+        }
         // we're only listening for one input anyway.
         if (!mIsFlying)
         {
@@ -105,4 +119,17 @@ public class Bird : MonoBehaviour, IInputListener
 
     }
 
+    void IWorldStateListener.OnGameLose()
+    {
+        // TODO - display dead bird?
+        mPlaying = false;
+    }
+
+    void IWorldStateListener.OnRestartGame()
+    {
+        mInputLockFrames = 5;
+        mPlaying = true;
+        // Reset bird's position!
+        transform.position = new Vector3(0, 0, 0);
+    }
 }

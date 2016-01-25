@@ -1,4 +1,4 @@
-﻿internal interface IWorldStateListener
+﻿public interface IWorldStateListener
 {
     void OnGameLose();
     void OnRestartGame();
