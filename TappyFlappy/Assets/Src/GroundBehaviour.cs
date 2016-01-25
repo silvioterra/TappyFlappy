@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Assets.Src;
 using System.Collections;
 
 public class GroundBehaviour : MonoBehaviour, IScreenListener

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Assets.Src;
 
 public class Bird : MonoBehaviour, IInputListener
 {

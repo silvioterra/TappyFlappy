@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
-namespace Assets.Src
+public interface IInputListener
 {
-    public interface IInputListener
-    {
-        void OnInputTriggered(string name);
-    }
+    void OnInputTriggered(string name);
 }

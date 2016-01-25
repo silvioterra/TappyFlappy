@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using Assets.Src;
 
 // This clearly isn't a very robust InputManager, but enough for a 1-day jam
 // Normally I'd have a system InputManager and the game registering a certain set of 

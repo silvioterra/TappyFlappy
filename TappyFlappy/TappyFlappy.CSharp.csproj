@@ -72,6 +72,7 @@
     <Compile Include="Assets\Src\InputManager.cs" />
     <Compile Include="Assets\Src\LevelManager.cs" />
     <Compile Include="Assets\Src\StaticBackground.cs" />
+    <Compile Include="Assets\Src\Turret.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
