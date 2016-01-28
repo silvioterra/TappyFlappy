@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class BulletManager : IWorldStateListener, ISpeedListener, IScreenListener
 {
     List<Bullet> mBullets;
+	List<Bullet> mDeleteBullets;
     private float mWorldPosition;
     private float mWorldWidth;
     private float mWorldHeight;
@@ -13,6 +14,7 @@ public class BulletManager : IWorldStateListener, ISpeedListener, IScreenListene
     public BulletManager()
     {
         mBullets = new System.Collections.Generic.List<Bullet>();
+		mDeleteBullets= new System.Collections.Generic.List<Bullet>();
         UpdateWorldVariables();
 
     }
@@ -20,23 +22,25 @@ public class BulletManager : IWorldStateListener, ISpeedListener, IScreenListene
 	// Update is called once per frame
 	public void Update ()
     {
+		mDeleteBullets.Clear ();
 
-        List<Bullet> delBullets = new List<Bullet>();
-        foreach (Bullet b in mBullets)
-        {
+        
+		for(int i = 0; i< mBullets.Count; i++)
+		{
+			Bullet b = mBullets [i];
             b.UpdatePosition(mWorldPosition);
             Vector3 pos = b.transform.position;
             if ((pos.x < -mWorldWidth || pos.x > mWorldWidth)
                 || (pos.y < -mWorldHeight || pos.y > mWorldHeight))
             {
-                delBullets.Add(b);
+                mDeleteBullets.Add(b);
             }
         }
-
-        foreach(Bullet b in delBullets)
-        {
+		for(int i = 0; i< mDeleteBullets.Count; i++)
+		{
+			Bullet b = mDeleteBullets [i];
             mBullets.Remove(b);
-            Object.Destroy(b);
+			Object.Destroy(b.gameObject);
         }
     }
     void IWorldStateListener.OnRestartGame()
@@ -47,8 +51,9 @@ public class BulletManager : IWorldStateListener, ISpeedListener, IScreenListene
     public void DestroyAllBullets()
     {
         // Kill all bullets.
-        foreach (Bullet b in mBullets)
-        {
+		for(int i = 0; i< mBullets.Count; i++)
+		{
+			Bullet b = mBullets [i];
             Object.Destroy(b.gameObject);
         }
         mBullets.Clear();

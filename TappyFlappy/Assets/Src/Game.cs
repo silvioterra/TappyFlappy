@@ -87,6 +87,7 @@ public class Game : MonoBehaviour, IInputListener
     // Update is called once per frame
     void Update()
     {
+		Profiler.BeginSample("screen stuff");
         // Soooo.... unity doesn't have a default callback for when we resize a window/change screen resolutions?
         // This seems either crazy or a lack of proper research on my part.
         if (mCachedScreenWidth != Screen.width || mCachedScreenHeight != Screen.height)
@@ -94,14 +95,24 @@ public class Game : MonoBehaviour, IInputListener
             mCachedScreenWidth = Screen.width;
             mCachedScreenHeight = Screen.height;
 
-            foreach (IScreenListener listener in mScreenListeners)
-            {
-                listener.OnScreenResolutionChanged(mCachedScreenWidth, mCachedScreenHeight);
+			for(int i = 0; i < mScreenListeners.Count; i++)
+			{
+				mScreenListeners[i].OnScreenResolutionChanged(mCachedScreenWidth, mCachedScreenHeight);
             }
         }
+		Profiler.EndSample();
+
+		Profiler.BeginSample("input tick");
         mInputManager.Update();
+		Profiler.EndSample();
+
+		Profiler.BeginSample("level tick");
         mLevelManager.Update();
+		Profiler.EndSample();
+
+		Profiler.BeginSample("bullet tick");
         mBulletManager.Update();
+		Profiler.EndSample();
     }
 
     public void AddScreenListener(IScreenListener newListener)

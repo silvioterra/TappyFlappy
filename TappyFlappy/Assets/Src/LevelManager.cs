@@ -82,9 +82,9 @@ public class LevelManager : IWorldStateListener, IScreenListener
         if (mWorldSpeed != 0.0f)
         {
             // Move any turrets/other world objects
-            foreach (ISpeedListener listener in mSpeedListeners)
+			for(int i=0; i < mSpeedListeners.Count; i++)
             {
-                listener.OnScreenCenterPositionUpdated(mWorldPosition);
+				mSpeedListeners[i].OnScreenCenterPositionUpdated(mWorldPosition);
             }
 
             if (mPlaying)
@@ -92,8 +92,9 @@ public class LevelManager : IWorldStateListener, IScreenListener
 
                 // Remove any turrets that might be outside of our play area
                 float minusHalf = mWorldPosition - (mWorldWidth / 2.0f);
-                foreach (Turret tmp in mCachedTurrets)
-                {
+				for(int i =0; i < mCachedTurrets.Count; i++)
+				{
+					Turret tmp = mCachedTurrets [i];
                     if (tmp.Used)
                     {
                         if (tmp.WorldPosition <= minusHalf - tmp.Width)
@@ -108,8 +109,9 @@ public class LevelManager : IWorldStateListener, IScreenListener
                 if (mObstacles.Count > 0 && mObstacles.Peek().mWorldPosition <= plusHalf)
                 {
                     LevelObstacle newObstacle = mObstacles.Dequeue();
-                    foreach (Turret tmp in mCachedTurrets)
-                    {
+					for(int i =0; i < mCachedTurrets.Count; i++)
+					{
+						Turret tmp = mCachedTurrets [i];
                         if (!tmp.Used)
                         {
                             tmp.SetUsed(true);
